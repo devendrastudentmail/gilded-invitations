@@ -1,26 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Header } from "@/components/site/Header";
+import { Footer } from "@/components/site/Footer";
+import { HeroSection } from "@/components/site/HeroSection";
+import { FeaturesSection } from "@/components/site/FeaturesSection";
+import { MetricsSection } from "@/components/site/MetricsSection";
+import { TestimonialsSection } from "@/components/site/TestimonialsSection";
+import { PricingSection } from "@/components/site/PricingSection";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "HinduInvites — Cinematic Personalized Wedding Invitations" },
+      { name: "description", content: "Create luxury, personalized digital wedding invitations in minutes. Unique links, live RSVP, wishing wall and stunning animations for every guest." },
+      { property: "og:title", content: "HinduInvites — Cinematic Wedding Invitations" },
+      { property: "og:description", content: "Personalized digital wedding invites with live RSVP, wishing wall and stunning animations." },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen">
+      <Header />
+      <main>
+        <HeroSection />
+        <MetricsSection />
+        <FeaturesSection />
+        <TestimonialsSection />
+        <PricingSection />
+      </main>
+      <Footer />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
