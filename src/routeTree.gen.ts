@@ -10,19 +10,41 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as AuthSignupRouteImport } from './routes/auth.signup'
 import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as DashboardWeddingsIndexRouteImport } from './routes/dashboard.weddings.index'
+import { Route as DashboardWeddingsNewRouteImport } from './routes/dashboard.weddings.new'
+import { Route as DashboardWeddingsIdIndexRouteImport } from './routes/dashboard.weddings.$id.index'
+import { Route as DashboardWeddingsIdGuestsRouteImport } from './routes/dashboard.weddings.$id.guests'
 
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/auth/signup',
@@ -34,36 +56,112 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardWeddingsIndexRoute = DashboardWeddingsIndexRouteImport.update({
+  id: '/weddings/',
+  path: '/weddings/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardWeddingsNewRoute = DashboardWeddingsNewRouteImport.update({
+  id: '/weddings/new',
+  path: '/weddings/new',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardWeddingsIdIndexRoute =
+  DashboardWeddingsIdIndexRouteImport.update({
+    id: '/weddings/$id/',
+    path: '/weddings/$id/',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardWeddingsIdGuestsRoute =
+  DashboardWeddingsIdGuestsRouteImport.update({
+    id: '/weddings/$id/guests',
+    path: '/weddings/$id/guests',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/pricing': typeof PricingRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/weddings/new': typeof DashboardWeddingsNewRoute
+  '/dashboard/weddings/': typeof DashboardWeddingsIndexRoute
+  '/dashboard/weddings/$id/guests': typeof DashboardWeddingsIdGuestsRoute
+  '/dashboard/weddings/$id/': typeof DashboardWeddingsIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pricing': typeof PricingRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/weddings/new': typeof DashboardWeddingsNewRoute
+  '/dashboard/weddings': typeof DashboardWeddingsIndexRoute
+  '/dashboard/weddings/$id/guests': typeof DashboardWeddingsIdGuestsRoute
+  '/dashboard/weddings/$id': typeof DashboardWeddingsIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/pricing': typeof PricingRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/weddings/new': typeof DashboardWeddingsNewRoute
+  '/dashboard/weddings/': typeof DashboardWeddingsIndexRoute
+  '/dashboard/weddings/$id/guests': typeof DashboardWeddingsIdGuestsRoute
+  '/dashboard/weddings/$id/': typeof DashboardWeddingsIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pricing' | '/auth/login' | '/auth/signup'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/pricing'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/dashboard/settings'
+    | '/dashboard/'
+    | '/dashboard/weddings/new'
+    | '/dashboard/weddings/'
+    | '/dashboard/weddings/$id/guests'
+    | '/dashboard/weddings/$id/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pricing' | '/auth/login' | '/auth/signup'
-  id: '__root__' | '/' | '/pricing' | '/auth/login' | '/auth/signup'
+  to:
+    | '/'
+    | '/pricing'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/dashboard/settings'
+    | '/dashboard'
+    | '/dashboard/weddings/new'
+    | '/dashboard/weddings'
+    | '/dashboard/weddings/$id/guests'
+    | '/dashboard/weddings/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/pricing'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/dashboard/settings'
+    | '/dashboard/'
+    | '/dashboard/weddings/new'
+    | '/dashboard/weddings/'
+    | '/dashboard/weddings/$id/guests'
+    | '/dashboard/weddings/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   PricingRoute: typeof PricingRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignupRoute: typeof AuthSignupRoute
@@ -78,12 +176,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/auth/signup': {
       id: '/auth/signup'
@@ -99,11 +218,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/weddings/': {
+      id: '/dashboard/weddings/'
+      path: '/weddings'
+      fullPath: '/dashboard/weddings/'
+      preLoaderRoute: typeof DashboardWeddingsIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/weddings/new': {
+      id: '/dashboard/weddings/new'
+      path: '/weddings/new'
+      fullPath: '/dashboard/weddings/new'
+      preLoaderRoute: typeof DashboardWeddingsNewRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/weddings/$id/': {
+      id: '/dashboard/weddings/$id/'
+      path: '/weddings/$id'
+      fullPath: '/dashboard/weddings/$id/'
+      preLoaderRoute: typeof DashboardWeddingsIdIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/weddings/$id/guests': {
+      id: '/dashboard/weddings/$id/guests'
+      path: '/weddings/$id/guests'
+      fullPath: '/dashboard/weddings/$id/guests'
+      preLoaderRoute: typeof DashboardWeddingsIdGuestsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardWeddingsNewRoute: typeof DashboardWeddingsNewRoute
+  DashboardWeddingsIndexRoute: typeof DashboardWeddingsIndexRoute
+  DashboardWeddingsIdGuestsRoute: typeof DashboardWeddingsIdGuestsRoute
+  DashboardWeddingsIdIndexRoute: typeof DashboardWeddingsIdIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardWeddingsNewRoute: DashboardWeddingsNewRoute,
+  DashboardWeddingsIndexRoute: DashboardWeddingsIndexRoute,
+  DashboardWeddingsIdGuestsRoute: DashboardWeddingsIdGuestsRoute,
+  DashboardWeddingsIdIndexRoute: DashboardWeddingsIdIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   PricingRoute: PricingRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignupRoute: AuthSignupRoute,
