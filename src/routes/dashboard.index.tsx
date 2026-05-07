@@ -104,6 +104,7 @@ function DashboardHome() {
           ))}
         </div>
       </div>
+      </div>
     </div>
   );
 }
