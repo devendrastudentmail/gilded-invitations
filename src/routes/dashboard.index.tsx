@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Heart, Users, Calendar, ClipboardCheck, Plus, ArrowRight } from "lucide-react";
+import { Heart, Users, Calendar, ClipboardCheck, Plus, ArrowRight, MapPin, Clock } from "lucide-react";
 import { useDashboard } from "@/lib/dashboardData";
 import { StatCard } from "@/components/dashboard/StatCard";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
@@ -32,7 +33,53 @@ function DashboardHome() {
         <StatCard icon={Calendar} label="Upcoming Events" value={upcoming} index={3} />
       </div>
 
-      <div className="mt-10 rounded-2xl border border-border/60 bg-white p-6 shadow-sm">
+      <div className="mt-10 grid gap-6 lg:grid-cols-5">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+          className="lg:col-span-2 rounded-2xl border border-border/60 bg-white p-6 shadow-sm"
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="font-display text-xl font-bold">Upcoming events</h2>
+            <span className="font-accent text-xs uppercase tracking-wider text-muted-foreground">Next 5</span>
+          </div>
+          <div className="mt-4 space-y-3">
+            {weddings
+              .flatMap((w) =>
+                w.events.map((e) => ({ ...e, wedding: `${w.bride} & ${w.groom}`, weddingId: w.id, fullDate: new Date(`${e.date}T${e.time}`) })),
+              )
+              .filter((e) => e.fullDate.getTime() > Date.now())
+              .sort((a, b) => a.fullDate.getTime() - b.fullDate.getTime())
+              .slice(0, 5)
+              .map((e) => (
+                <Link
+                  key={`${e.weddingId}-${e.id}`}
+                  to="/dashboard/weddings/$id"
+                  params={{ id: e.weddingId }}
+                  className="flex items-start gap-3 rounded-xl border border-border/40 p-3 transition hover:border-primary/40 hover:bg-muted/30"
+                >
+                  <div className="flex h-11 w-11 flex-col items-center justify-center rounded-lg bg-gradient-primary text-white">
+                    <span className="text-[9px] font-accent uppercase">{e.fullDate.toLocaleString("en", { month: "short" })}</span>
+                    <span className="text-sm font-bold leading-none">{e.fullDate.getDate()}</span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="truncate font-semibold">{e.name}</p>
+                      <span className="flex items-center gap-1 text-[11px] text-muted-foreground"><Clock className="h-3 w-3" />{e.time}</span>
+                    </div>
+                    <p className="truncate text-xs text-muted-foreground">{e.wedding}</p>
+                    <p className="mt-0.5 flex items-center gap-1 truncate text-[11px] text-muted-foreground"><MapPin className="h-3 w-3" />{e.location}</p>
+                  </div>
+                </Link>
+              ))}
+            {weddings.flatMap((w) => w.events).filter((e) => new Date(`${e.date}T${e.time}`).getTime() > Date.now()).length === 0 && (
+              <p className="py-6 text-center text-sm text-muted-foreground">No upcoming events.</p>
+            )}
+          </div>
+        </motion.div>
+
+        <div className="lg:col-span-3 rounded-2xl border border-border/60 bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-xl font-bold">Recent weddings</h2>
           <Link to="/dashboard/weddings" className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">View all <ArrowRight className="h-3.5 w-3.5" /></Link>
@@ -56,6 +103,7 @@ function DashboardHome() {
             </Link>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );
