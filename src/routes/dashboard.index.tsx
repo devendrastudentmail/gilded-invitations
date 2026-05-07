@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Heart, Users, Calendar, ClipboardCheck, Plus, ArrowRight } from "lucide-react";
+import { Heart, Users, Calendar, ClipboardCheck, Plus, ArrowRight, MapPin, Clock } from "lucide-react";
 import { useDashboard } from "@/lib/dashboardData";
 import { StatCard } from "@/components/dashboard/StatCard";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
